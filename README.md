@@ -473,6 +473,13 @@ CREATE INDEX IX_serial_log_api_name ON serial_log(api_name);
 ## 🔒 壓力測試
 
 1. Postman：
+<img width="1909" height="1004" alt="螢幕擷取畫面 2026-01-30 151548" src="https://github.com/user-attachments/assets/2974f1c0-819b-4e1b-9e4d-18e990623389" />
+<img width="1913" height="987" alt="螢幕擷取畫面 2026-01-30 151631" src="https://github.com/user-attachments/assets/283bcc3c-ae34-44a6-9aa0-349ac75ed977" />
+<img width="1916" height="989" alt="螢幕擷取畫面 2026-01-30 151739" src="https://github.com/user-attachments/assets/15d81a76-2406-41e1-aba7-685828808b03" />
+<img width="1916" height="981" alt="螢幕擷取畫面 2026-01-30 151805" src="https://github.com/user-attachments/assets/f33e008a-bb52-466e-83e0-c80c1af5c9cf" />
 
 2. JMeter：
-   
+<img width="1523" height="856" alt="螢幕擷取畫面 2026-02-02 172241" src="https://github.com/user-attachments/assets/88b52610-eaef-4440-b548-6926b85f7f46" />
+<img width="1520" height="856" alt="螢幕擷取畫面 2026-02-02 172407" src="https://github.com/user-attachments/assets/a4e0e7a5-8681-4f37-9e2e-48463ee25d6c" />
+<img width="1517" height="853" alt="螢幕擷取畫面 2026-02-02 172422" src="https://github.com/user-attachments/assets/9e666a8d-4772-4b74-9660-29f0b725588a" />
+
