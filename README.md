@@ -262,6 +262,12 @@
 ```json
 {
     "status": "error",
+    "message": "此序號不存在"
+}
+
+```json
+{
+    "status": "error",
     "message": "此序號已經被核銷使用"
 }
 ```
@@ -270,6 +276,20 @@
 {
     "status": "error",
     "message": "此序號已被註銷，無法核銷"
+}
+```
+
+```json
+{
+    "status": "error",
+    "message": "此序號尚未生效"
+}
+```
+
+```json
+{
+    "status": "error",
+    "message": "此序號已過期"
 }
 ```
 
