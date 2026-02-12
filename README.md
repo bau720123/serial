@@ -510,3 +510,5 @@ CREATE INDEX IX_serial_log_api_name ON serial_log(api_name);
 <img width="1520" height="856" alt="螢幕擷取畫面 2026-02-02 172407" src="https://github.com/user-attachments/assets/a4e0e7a5-8681-4f37-9e2e-48463ee25d6c" />
 <img width="1517" height="853" alt="螢幕擷取畫面 2026-02-02 172422" src="https://github.com/user-attachments/assets/9e666a8d-4772-4b74-9660-29f0b725588a" />
 
+## 🔒 Iframe 模擬
+<img width="1908" height="994" alt="iframe" src="https://github.com/user-attachments/assets/e79f8541-1666-48dc-8af4-ba9fb63bd15c" />
