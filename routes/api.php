@@ -21,5 +21,5 @@ Route::post('/serials_redeem', [SerialController::class, 'serials_redeem'])
     ->middleware('api.logger');
 
 Route::post('/serials_cancel', [SerialController::class, 'serials_cancel'])
-    ->name('註銷序號')
+    ->name('批次註銷序號')
     ->middleware('api.logger');
