@@ -381,6 +381,7 @@
 3. 核心邏輯機制
    - 併發防禦：核銷流程採用 Pessimistic Locking（lockForUpdate） 悲觀鎖，確保在極短時間內重複請求時，資料的一致性與唯一性。
    - 資料自動清洗：序號 content 欄位在核銷前，後端會自動執行 trim() 去除前後空白，並執行 strtoupper() 強制轉為大寫，增加使用者兌換的容錯率。
+   - 全程紀錄：所有請求與回應皆由 api.logger 寫入資料庫日誌表。
 
 ## 🛡 全域中間件說明（Middleware: api.logger）
 
@@ -469,18 +470,9 @@ CREATE INDEX IX_serial_log_api_name ON serial_log(api_name);
 
 ---
 
-## 🔒 技術規格重點
+## 🔒 壓力測試
 
-1. 成功狀態碼定義:
-   - 201 (Created)：代表資源「新增」成功。用於 /serials_insert 與 /serials_additional_insert。
-   - 200 (OK)：代表操作「執行」成功。用於 /serials_redeem。
+1. Postman：
 
-2. 錯誤處理邏輯:
-   - 400 (Bad Request)：業務邏輯阻擋（如序號已過期、已使用）。
-   - 422 (Unprocessable Entity)：格式驗證失敗（如日期錯誤、筆數超過限制、ID 重複）。
-   - 500 (Internal Error): 非預期系統錯誤。
-
-3. 核心邏輯特性:
-   - 併發防禦：透過 lockForUpdate 鎖定該列序號，防止重複領取。
-   - 資料自動清洗：自動執行字串 trim() 與轉大寫。
-   - 全程紀錄：所有請求與回應皆由 api.logger 寫入資料庫日誌表。
+2. JMeter：
+   
