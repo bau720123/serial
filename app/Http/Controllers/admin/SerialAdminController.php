@@ -85,7 +85,7 @@ class SerialAdminController extends Controller
             fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
 
             // 寫入標題列
-            fputcsv($handle, ['活動名稱', '活動唯一ID', '序號', '核銷狀況', '更新時間', '開始時間', '結束時間', '備註說明', '新增時間']);
+            fputcsv($handle, ['活動名稱', '活動唯一ID', '序號', '狀態', '更新時間', '有效期限（起）', '有效期限（迄）', '備註說明', '新增時間']);
 
             // 批次處理資料 (每次處理 1000 筆，效能最優)
             $query->chunk(1000, function ($serials) use ($handle) {

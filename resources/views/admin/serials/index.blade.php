@@ -32,7 +32,7 @@
             flex-direction: column;
         }
     }
-</style>
+    </style>
 </head>
 
 <body>
@@ -51,11 +51,11 @@
                 <input type="text" name="keyword" class="form-control" placeholder="請輸入 活動名稱 或是 活動唯一 ID" value="{{ request('keyword') }}">
             </div>
             <div class="col-md-3">
-                <label class="form-label fw-bold">序號搜尋</label>
+                <label class="form-label fw-bold">序號</label>
                 <input type="text" name="content" class="form-control" placeholder="請輸入序號" value="{{ request('content') }}">
             </div>
             <div class="col-md-3">
-                <label class="form-label fw-bold">核銷狀況</label>
+                <label class="form-label fw-bold">狀態</label>
                 <select name="status" class="form-select">
                     <option value="">請選取</option>
                     <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>未核銷</option>
@@ -87,8 +87,8 @@
                 <thead class="table-light">
                     <tr>
                         <th style="width: 15%;">活動名稱 / ID</th>
-                        <th style="width: 10%;">序號內容</th>
-                        <th style="width: 10%;">核銷狀況</th>
+                        <th style="width: 10%;">序號</th>
+                        <th style="width: 10%;">狀態</th>
                         <th style="width: 15%;">更新時間</th>
                         <th style="width: 15%;">有效期限 (起~迄)</th>
                         <th style="width: 20%;">備註說明</th>
