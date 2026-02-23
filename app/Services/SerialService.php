@@ -120,6 +120,7 @@ class SerialService
         return $letter . $numbers;
     }
 
+    // 核銷序號
     public function redeemSerial(string $content)
     {
         // 去前後空白 + 轉大寫
@@ -173,6 +174,7 @@ class SerialService
         });
     }
 
+    // 註銷序號
     public function cancelSerials(array $contents, string $note, string $now)
     {
         $results = [
