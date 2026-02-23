@@ -163,13 +163,13 @@ class SerialController extends Controller
 
         // 增加自定義 Replacer 來顯示出錯的內容
         $validator->addReplacer('size', function ($message, $attribute, $rule, $parameters, $validator) {
-            // 抓取當前驗證的值 (例如 A1)
+            // 抓取當前正在驗證的序號
             $value = \Illuminate\Support\Arr::get($validator->getData(), $attribute);
 
             // 先替換我們自訂的 :value
             $message = str_replace(':value', "[{$value}]", $message);
 
-            // 補上被我們「弄丟」的 :size
+            // 補上有問題的 :size
             return str_replace(':size', $parameters[0], $message);
         });
 
