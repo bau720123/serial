@@ -8,6 +8,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+// api.logge：bootstrap/app.php
+
 Route::post('/serials_insert', [SerialController::class, 'serials_insert'])
     ->name('批次新增序號')
     ->middleware('api.logger');
