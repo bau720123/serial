@@ -405,6 +405,14 @@
    - 400（Bad Request）: 業務邏輯不符。例如序號「已使用」、「已過期」或「不存在」，由 Service 層拋出 Exception 觸發。
    - 422（Unprocessable Entity）: 參數驗證失敗。由 Controller 的 Validator 攔截，例如日期格式錯誤、ID 重複、或筆數超過限制（1~100）。
    - 500（Internal Server Error）: 非預期系統錯誤。例如資料庫連線中斷或程式執行異常。
+#### ❌ 錯誤回應範例
+```json
+{
+    "status": "error",
+    "message": "系統處理失敗",
+    "debug": "系統例外的錯誤訊息"
+}
+```
 
 3. 核心邏輯機制
    - 併發防禦：核銷流程採用 Pessimistic Locking（lockForUpdate） 悲觀鎖，確保在極短時間內重複請求時，資料的一致性與唯一性。
