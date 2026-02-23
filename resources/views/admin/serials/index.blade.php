@@ -75,7 +75,8 @@
                 <div class="mobile-btn-group">
                     <a href="/admin/serials" class="btn btn-light border btn-mobile-full">清除重置</a>
                     <button type="submit" class="btn btn-primary px-5 btn-mobile-full">立即搜尋</button>
-                    <button type="button" id="exportBtn" class="btn btn-success px-4 btn-mobile-full">匯出 CSV</button>
+                    <button type="button" id="exportBtn" class="btn btn-success px-4 btn-mobile-full" style=" display:none; ">匯出 CSV</button>
+                    <button type="button" id="exportBtnAjx" class="btn btn-success px-4 btn-mobile-full">匯出 CSV</button>
                 </div>
             </div>
         </form>
@@ -209,6 +210,86 @@ $(document).ready(function() {
         // after：export?content=C1689170
 
         window.location.href = baseUrl + "/export?" + queryString;
+    });
+
+    // 匯出按鈕
+    $('#exportBtnAjx').on('click', function() {
+        const $this = $(this);
+        const $form = $('#searchForm');
+        const paramsObj = getCleanParamsArray($form); // 手動組裝乾淨 URL
+
+        // 匯出前同樣檢查日期防呆
+        const start = $('#date_start').val();
+        const end = $('#date_end').val();
+        if (start && end && start > end) {
+            // 直接觸發 form 的 submit 來顯示 Swal 錯誤，就不用再寫一次邏輯了
+            $form.submit();
+            return false;
+        }
+
+        // 將按鈕設定為不能點擊並且同時顯示 Loading 的效果
+        $this.attr('disabled', true);
+        $this.prepend('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ');
+
+        $.ajax({
+            url: '/admin/serials/export_ajx', // 指向新的方法
+            method: 'GET',
+            data: paramsObj,
+            xhrFields: {
+                responseType: 'blob' // 告訴後端這是一個二進位檔案
+            },
+            success: function(data, status, xhr) {
+                // 從 Header 抓取後端給的建議檔名
+                let fileName = xhr.getResponseHeader('X-Suggested-Filename');
+
+                // 建立一個虛擬的 <a> 標籤來觸發下載
+                const blob = new Blob([data], { type: 'text/csv' });
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            },
+            error: function(xhr, status, errorThrown) {
+                // 取得 HTTP 狀態碼 (例如 404, 500)
+                const statusCode = xhr.status;
+
+                // 針對不同的狀態碼給予人性化的提示
+                let errorMessage = '匯出失敗';
+
+                if (statusCode === 404) {
+                    errorMessage = '找不到匯出路徑 (404)，請檢查路由設定';
+                } else if (statusCode === 500) {
+                    errorMessage = '伺服器內部錯誤 (500)，請檢查後端日誌';
+                } else if (status === 'timeout') {
+                    errorMessage = '請求逾時，資料量可能過大';
+                } else {
+                    errorMessage = '發生未知錯誤：' + errorThrown;
+                }
+
+                // 印出詳細資訊到 Console 供開發者查看
+                console.log({
+                    status: status,
+                    statusCode: statusCode,
+                    errorThrown: errorThrown,
+                    responseText: xhr.responseText // 只有在沒被封裝成 Blob 時才抓得到
+                });
+
+                Swal.fire({
+                    icon: 'error',
+                    title: '匯出發生錯誤',
+                    text: errorMessage,
+                    confirmButtonText: '確定',
+                    confirmButtonColor: '#0d6efd'
+                });
+            },
+            complete: function() {
+                // 將按鈕重新設定回最初原始的樣子(不論成功失敗都會執行)
+                $this.attr('disabled', false);
+                $this.find('span.spinner-border').remove();
+            }
+        });
     });
 });
 </script>
