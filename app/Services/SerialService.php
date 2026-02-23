@@ -17,8 +17,8 @@ class SerialService
             // 當前時間
             $currentTime = now();
 
-            // 批次新增序號，需建立活動
             if (!isset($data['insert_serial_activity'])) {
+                // 批次新增序號，需建立活動
                 $activityId = DB::connection($this->connection)->table('serial_activity')->insertGetId([
                     'activity_name'      => $data['activity_name'],
                     'activity_unique_id' => $data['activity_unique_id'],
