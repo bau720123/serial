@@ -75,8 +75,7 @@
                 <div class="mobile-btn-group">
                     <a href="/admin/serials" class="btn btn-light border btn-mobile-full">清除重置</a>
                     <button type="submit" class="btn btn-primary px-5 btn-mobile-full">立即搜尋</button>
-                    <button type="button" id="exportBtn" class="btn btn-success px-4 btn-mobile-full" style=" display:none; ">匯出 CSV</button>
-                    <button type="button" id="exportBtnAjx" class="btn btn-success px-4 btn-mobile-full">匯出 CSV</button>
+                    <button type="button" id="exportBtn" class="btn btn-success px-4 btn-mobile-full">匯出 CSV</button>
                 </div>
             </div>
         </form>
@@ -190,30 +189,6 @@ $(document).ready(function() {
 
     // 匯出按鈕
     $('#exportBtn').on('click', function() {
-        const $form = $('#searchForm');
-
-        // 匯出前同樣檢查日期防呆
-        const start = $('#date_start').val();
-        const end = $('#date_end').val();
-        if (start && end && start > end) {
-            // 直接觸發 form 的 submit 來顯示 Swal 錯誤，就不用再寫一次邏輯了
-            $form.submit();
-            return false;
-        }
-
-        // 手動組裝乾淨 URL
-        const paramsObj = getCleanParamsArray($form);
-        const queryString = $.param(paramsObj); // jQuery 內建將物件轉為 URL 參數字串
-        const baseUrl = $form.attr('action'); // searchForm 的 action 屬性值
-
-        // before：export?keyword=&content=C1689170&status=&date_start=&date_end=
-        // after：export?content=C1689170
-
-        window.location.href = baseUrl + "/export?" + queryString;
-    });
-
-    // 匯出按鈕
-    $('#exportBtnAjx').on('click', function() {
         const $this = $(this);
         const $form = $('#searchForm');
         const paramsObj = getCleanParamsArray($form); // 手動組裝乾淨 URL
@@ -232,7 +207,7 @@ $(document).ready(function() {
         $this.prepend('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ');
 
         $.ajax({
-            url: '/admin/serials/export_ajx', // 指向新的方法
+            url: '/admin/serials/export',
             method: 'GET',
             data: paramsObj,
             xhrFields: {

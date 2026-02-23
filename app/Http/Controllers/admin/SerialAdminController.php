@@ -65,58 +65,6 @@ class SerialAdminController extends Controller
     // 後台序號管理匯出
     public function export(Request $request)
     {
-        $query = $this->common_data($request); // 呼叫共用邏輯
-
-        // 設定檔名與 Header
-        $fileName = 'serial_export_' . date('YmdHis') . '.csv';
-        $headers = [
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
-        ];
-
-        // 使用串流方式回傳，避免記憶體耗盡
-        return new StreamedResponse(function() use ($query) {
-            $handle = fopen('php://output', 'w');
-
-            // 寫入 UTF-8 BOM，防止 Excel 開啟亂碼
-            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
-
-            // 寫入標題列
-            fputcsv($handle, ['活動名稱', '活動唯一ID', '序號', '狀態', '更新時間', '有效期限（起）', '有效期限（迄）', '備註說明', '新增時間']);
-
-            // 批次處理資料 (每次處理 1000 筆，效能最優)
-            $query->chunk(1000, function ($serials) use ($handle) {
-                foreach ($serials as $row) {
-                    $statusText = match ($row->status) {
-                        0 => '未核銷',
-                        1 => '已核銷',
-                        2 => '已註銷',
-                        default => '未設定',
-                    };
-                    fputcsv($handle, [
-                        $row->activity->activity_name ?? 'N/A',
-                        $row->activity->activity_unique_id ?? '-',
-                        $row->content,
-                        $statusText,
-                        $row->updated_at ?? '--',
-                        $row->start_date,
-                        $row->end_date,
-                        $row->note ?? '',
-                        $row->created_at,
-                    ]);
-                }
-            });
-
-            fclose($handle);
-        }, 200, $headers);
-    }
-
-    // 後台序號管理匯出 (新增的 AJAX 方式)
-    public function export_ajx(Request $request)
-    {
         // sleep(5); // 模擬一個耗時的匯出過程
         $query = $this->common_data($request);
 
