@@ -18,6 +18,8 @@ class SerialController extends Controller
         $this->serialService = $serialService;
     }
 
+    // Validator 的錯誤訊息都會在：lang/zh_TW/validation.php
+
     // 批次新增序號
     public function serials_insert(Request $request)
     {
@@ -60,7 +62,7 @@ class SerialController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'message' => '系統處理失敗',
-                'debug'   => $e->getMessage() // 正式環境建議隱藏 debug 資訊
+                'debug'   => $e->getMessage()
             ], 500);
         }
     }
