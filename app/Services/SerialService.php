@@ -10,6 +10,7 @@ class SerialService
 {
     protected $connection = 'sqlsrv_serial';
 
+    // 批次新增序號與批次追加序號
     public function createActivityWithSerials(array $data)
     {
         return DB::connection($this->connection)->transaction(function () use ($data) {
