@@ -264,6 +264,7 @@
     "status": "error",
     "message": "此序號不存在"
 }
+```
 
 ```json
 {
