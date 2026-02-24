@@ -1,0 +1,30 @@
+# === Laravel 專屬排除清單 ===
+
+# 核心依賴 (這部分最佔空間，絕對要排除)
+/vendor/
+/node_modules/
+
+# 框架產生的快取與日誌
+/storage/*.log
+/storage/framework/cache/data/
+/storage/framework/sessions/
+/storage/framework/views/
+/storage/debugbar/
+/bootstrap/cache/
+
+# 環境設定與金鑰 (安全考量)
+.env
+.env.*
+*.pem
+auth.json
+
+# 測試與前端編譯
+.phpunit.result.cache
+/public/build/
+/public/storage/
+/mix-manifest.json
+
+# IDE 與系統檔
+.idea/
+.vscode/
+.DS_Store
