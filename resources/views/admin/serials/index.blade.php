@@ -63,7 +63,7 @@
                     <option value="2" {{ request('status') === '2' ? 'selected' : '' }}>已註銷</option>
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-12">
                 <label class="form-label fw-bold">搜尋區間</label>
                 <div class="d-flex gap-2 search-date-group">
                     <input type="date" name="date_start" id="date_start" class="form-control" value="{{ request('date_start') }}">
