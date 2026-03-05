@@ -115,7 +115,7 @@ class SerialService
 
     private function generateRandomString()
     {
-        $letter = chr(rand(65, 90)); // A-Z
+        $letter = chr(mt_rand(65, 90)); // A-Z
         $numbers = str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT); // 產生 1 到 9999999 之間的隨機整數，並在左側補 0 直到補滿 7 位數
         return $letter . $numbers;
     }

@@ -126,6 +126,7 @@ class SerialController extends Controller
         ]);
 
         if ($validator->fails()) {
+            // 格式正確但內容「不合法」
             return response()->json([
                 'status'  => 'error',
                 'message' => '驗證失敗',
@@ -174,15 +175,7 @@ class SerialController extends Controller
         });
 
         if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'message' => '驗證失敗',
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
-        // 如果驗證失敗，回傳 422
-        if ($validator->fails()) {
+            // 格式正確但內容「不合法」
             return response()->json([
                 'status'  => 'error',
                 'message' => '驗證失敗',

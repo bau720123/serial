@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class ApiLogger
@@ -25,17 +26,21 @@ class ApiLogger
         // 3. 紀錄回應結束時間
         $responseAt = now();
 
-        // 4. 寫入資料庫
-        DB::connection('sqlsrv_serial')->table('serial_log')->insert([
-            'api_name'    => $request->route()->getName() ?? '未定義 API',
-            'host'        => $request->ip(),
-            'api'         => $request->fullUrl(),
-            'request'     => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
-            'request_at'  => $requestAt,
-            'response'    => json_encode(json_decode($response->getContent(), true), JSON_UNESCAPED_UNICODE),
-            'response_at' => $responseAt,
-            'created_at'  => $requestAt,
-        ]);
+        // 4. 寫入資料庫（包裝 try-catch，避免 Log 失敗影響主要 API 回應）
+        try {
+            DB::connection('sqlsrv_serial')->table('serial_log')->insert([
+                'api_name'    => $request->route()->getName() ?? '未定義 API',
+                'host'        => $request->ip(),
+                'api'         => $request->fullUrl(),
+                'request'     => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
+                'request_at'  => $requestAt,
+                'response'    => json_encode(json_decode($response->getContent(), true), JSON_UNESCAPED_UNICODE),
+                'response_at' => $responseAt,
+                'created_at'  => $requestAt,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('ApiLogger 寫入失敗：' . $e->getMessage());
+        }
 
         return $response;
     }
