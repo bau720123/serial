@@ -34,19 +34,14 @@ class SerialAdminController extends Controller
             $query->where('status', $request->status);
         }
 
-        // 日期區間搜尋邏輯
-        if ($request->filled('date_start') || $request->filled('date_end')) {
-            $query->where(function($q) use ($request) {
-                // 如果有開始日期：撈取開始日期大於等於指定日期的所有資料
-                if ($request->filled('date_start')) {
-                    $q->where('start_date', '>=', $request->date_start . ' 00:00:00');
+        // 如果有開始日期：撈取開始日期大於等於指定日期的所有資料
+        if ($request->filled('date_start')) {
+            $query->where('start_date', '>=', $request->date_start . ' 00:00:00');
+        }
 
-                }
-                // 如果有結束日期：撈取結束日期小於等於指定日期的所有資料
-                if ($request->filled('date_end')) {
-                    $q->where('end_date', '<=', $request->date_end . ' 23:59:59');
-                }
-            });
+        // 如果有結束日期：撈取結束日期小於等於指定日期的所有資料
+        if ($request->filled('date_end')) {
+            $query->where('end_date', '<=', $request->date_end . ' 23:59:59');
         }
 
         return $query;

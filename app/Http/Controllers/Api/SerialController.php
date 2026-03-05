@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Services\SerialService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 use App\Models\SerialActivity;
@@ -49,6 +50,7 @@ class SerialController extends Controller
 
         try {
             // 呼叫 Service 處理業務邏輯
+            // 可考慮改用 $validator->validated() 取代 $request->all()，僅傳入已驗證的欄位，過濾前端多帶的非預期參數
             $result = $this->serialService->createActivityWithSerials($request->all());
 
             return response()->json([
@@ -99,6 +101,7 @@ class SerialController extends Controller
             ]);
 
             // 呼叫 Service 處理業務邏輯
+            // 可考慮改用 $validator->validated() 取代 $request->all()，僅傳入已驗證的欄位，過濾前端多帶的非預期參數
             $result = $this->serialService->createActivityWithSerials($request->all());
 
             return response()->json([
@@ -156,7 +159,7 @@ class SerialController extends Controller
     public function serials_cancel(Request $request)
     {
         // 使用 Validator 手動驗證，確保失敗時也能回傳 JSON 並被 middleware 紀錄
-        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'content' => 'required|array|min:1|max:1000',
             'content.*' => 'required|string|size:8',
             'note'      => 'required|string|max:255'
@@ -165,7 +168,7 @@ class SerialController extends Controller
         // 增加自定義 Replacer 來顯示出錯的內容
         $validator->addReplacer('size', function ($message, $attribute, $rule, $parameters, $validator) {
             // 抓取當前正在驗證的序號
-            $value = \Illuminate\Support\Arr::get($validator->getData(), $attribute);
+            $value = Arr::get($validator->getData(), $attribute);
 
             // 先替換我們自訂的 :value
             $message = str_replace(':value', "[{$value}]", $message);
@@ -185,7 +188,7 @@ class SerialController extends Controller
 
         $now = now()->toDateTimeString(); // 當下時間
 
-        $results = $this->serialService->cancelSerials($request->content, $request->note, $now);
+        $results = $this->serialService->cancelSerials($request->input('content'), $request->input('note'), $now);
 
         // 判斷最終 Message
         $successCount = count($results['success']);
