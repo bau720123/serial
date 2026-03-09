@@ -121,13 +121,28 @@ class SerialService
     }
 
     // 核銷序號
-    public function redeemSerial(string $content)
+    public function redeemSerial(string $orderno, string $content)
     {
         // 去前後空白 + 轉大寫
+        $orderno = trim($orderno);
         $content = strtoupper(trim($content));
 
-        return DB::connection($this->connection)->transaction(function () use ($content) {
+        return DB::connection($this->connection)->transaction(function () use ($orderno, $content) {
             $now = now();
+
+            // 查找訂單編號並鎖定該行 (lockForUpdate)
+            $order_no = DB::connection($this->connection)
+                ->table('serial_detail')
+                ->where('orderno', $orderno)
+                ->where('status', 1) // 已核銷的訂單編號才算重複使用
+                ->lockForUpdate()
+                ->first();
+
+            // 條件檢查
+
+            if ($order_no) {
+                throw new Exception("該訂單編號已被其它序號所核銷使用，請勿重複使用");
+            }
 
             // 查找序號並鎖定該行 (lockForUpdate)
             $serial = DB::connection($this->connection)
@@ -163,11 +178,13 @@ class SerialService
                 ->table('serial_detail')
                 ->where('id', $serial->id)
                 ->update([
+                    'orderno'    => $orderno,
                     'status'     => 1,
                     'updated_at' => $now, // 此時 updated_at 紀錄的是真正的核銷時點
                 ]);
 
             return [
+                'serial_orderno' => $orderno,
                 'serial_content' => $serial->content,
                 'redeemed_at'    => $now->toDateTimeString(),
             ];

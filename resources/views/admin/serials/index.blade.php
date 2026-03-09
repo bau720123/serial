@@ -51,6 +51,10 @@
                 <input type="text" name="keyword" class="form-control" placeholder="請輸入 活動名稱 或是 活動唯一 ID" value="{{ request('keyword') }}">
             </div>
             <div class="col-md-3">
+                <label class="form-label fw-bold">訂單編號</label>
+                <input type="text" name="orderno" class="form-control" placeholder="請輸入訂單編號" value="{{ request('orderno') }}">
+            </div>
+            <div class="col-md-3">
                 <label class="form-label fw-bold">序號</label>
                 <input type="text" name="content" class="form-control" placeholder="請輸入序號" value="{{ request('content') }}">
             </div>
@@ -87,12 +91,13 @@
                 <thead class="table-light" style="position: sticky; top: 0; z-index: 2;">
                     <tr>
                         <th style="width: 15%;">活動名稱 / ID</th>
+                        <th style="width: 10%;">訂單編號</th>
                         <th style="width: 10%;">序號</th>
                         <th style="width: 10%;">狀態</th>
-                        <th style="width: 15%;">更新時間</th>
-                        <th style="width: 15%;">有效期限 (起~迄)</th>
-                        <th style="width: 20%;">備註說明</th>
-                        <th style="width: 15%;">新增時間</th>
+                        <th style="width: 10%;">更新時間</th>
+                        <th style="width: 10%;">有效期限 (起~迄)</th>
+                        <th style="width: 15%;">備註說明</th>
+                        <th style="width: 10%;">新增時間</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,12 +107,13 @@
                             <div class="fw-bold">{{ $item->activity->activity_name ?? 'N/A' }}</div>
                             <small class="text-muted">{{ $item->activity->activity_unique_id ?? '-' }}</small>
                         </td>
+                        <td>{{ $item->orderno ?? '-' }}</td>
                         <td><code class="fs-5">{{ $item->content }}</code></td>
                         <td class="text-center">
                             @if($item->status == 0)
                                 <span class="badge bg-success status-badge">未核銷</span>
                             @elseif($item->status == 1)
-                                <span class="badge bg-success status-badge">已核銷</span>
+                                <span class="badge bg-secondary status-badge">已核銷</span>
                             @elseif($item->status == 2)
                                 <span class="badge bg-dark status-badge">已註銷</span>
                             @else
@@ -116,7 +122,7 @@
                         </td>
                         <td>{{ $item->updated_at ?? '--' }}</td>
                         <td>
-                            <small>{{ $item->start_date }}</small><br>
+                            <small>{{ $item->start_date }}</small><br>至<br>
                             <small>{{ $item->end_date }}</small>
                         </td>
                         <td><small class="text-muted">{{ $item->note ?? '-' }}</small></td>
@@ -124,7 +130,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="text-center py-5 text-muted">目前沒有符合條件的資料</td>
+                        <td colspan="8" class="text-center py-5 text-muted">目前沒有符合條件的資料</td>
                     </tr>
                     @endforelse
                 </tbody>

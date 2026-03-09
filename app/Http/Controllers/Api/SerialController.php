@@ -125,6 +125,7 @@ class SerialController extends Controller
     {
         // 基本格式驗證
         $validator = Validator::make($request->all(), [
+            'orderno' => 'required|string',
             'content' => 'required|string|size:8',
         ]);
 
@@ -138,7 +139,7 @@ class SerialController extends Controller
         }
 
         try {
-            $result = $this->serialService->redeemSerial($request->input('content'));
+            $result = $this->serialService->redeemSerial($request->input('orderno'), $request->input('content'));
 
             return response()->json([
                 'status'  => 'success',

@@ -42,6 +42,7 @@ return [
         'end_date'           => '結束日期',
         'quota'              => '產生數量',
         'note'               => '備註原因',
+        'orderno'            => '訂單編號',
         'content'            => '序號內容',
         'content.*'          => '序號項目',
     ],

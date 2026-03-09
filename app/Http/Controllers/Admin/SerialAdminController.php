@@ -24,6 +24,11 @@ class SerialAdminController extends Controller
             });
         }
 
+        // 訂單編號搜尋
+        if ($request->filled('orderno')) {
+            $query->where('orderno', trim($request->orderno));
+        }
+
         // 序號搜尋
         if ($request->filled('content')) {
             $query->where('content', trim($request->content));
@@ -77,7 +82,7 @@ class SerialAdminController extends Controller
             fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
 
             // 寫入標題列
-            fputcsv($handle, ['活動名稱', '活動唯一ID', '序號', '狀態', '更新時間', '有效期限（起）', '有效期限（迄）', '備註說明', '新增時間']);
+            fputcsv($handle, ['活動名稱', '活動唯一ID', '訂單編號', '序號', '狀態', '更新時間', '有效期限（起）', '有效期限（迄）', '備註說明', '新增時間']);
 
             // 批次處理資料 (每次處理 1000 筆，效能最優)
             $query->chunk(1000, function ($serials) use ($handle) {
@@ -91,6 +96,7 @@ class SerialAdminController extends Controller
                     fputcsv($handle, [
                         $row->activity->activity_name ?? 'N/A',
                         $row->activity->activity_unique_id ?? '-',
+                        $row->orderno ?? '-',
                         $row->content,
                         $statusText,
                         $row->updated_at ?? '--',
